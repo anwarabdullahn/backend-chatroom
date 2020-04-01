@@ -14,6 +14,10 @@ const roomSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'messages'
   }],
+  participans: [{
+    type: Schema.Types.ObjectId,
+    ref: 'users',
+  }],
 }, {
   versionKey: false,
   timestamps: true,

@@ -17,7 +17,7 @@ class Database {
    * @param {Object} configs 
    */
   static connect(databaseUrl, configs = {}) {
-    mongoose.set('debug', true);
+    // mongoose.set('debug', true);
     mongoose.connect(databaseUrl, { ...defaultConfig, ...configs });
     const db = mongoose.connection;
 

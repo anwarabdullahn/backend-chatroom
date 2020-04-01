@@ -9,6 +9,7 @@ const userSchema = new Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
   }
 }, {
   versionKey: false,
@@ -16,7 +17,13 @@ const userSchema = new Schema({
 });
 
 class User extends model('users', userSchema) {
-
+  static isEmailExist(email) {
+    return new Promise((resolve) => {
+      this.findOne({ email }).then(data =>
+        data ? resolve(true) : resolve(false)
+      );
+    })
+  }
 }
 
 export default User;
