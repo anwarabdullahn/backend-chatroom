@@ -22,11 +22,9 @@ const userSchema = new Schema({
 
 class User extends model('users', userSchema) {
   static isEmailExist(email) {
-    return new Promise((resolve) => {
-      this.findOne({ email }).then(data =>
-        data ? resolve(true) : resolve(false)
-      );
-    })
+    return this.findOne({ email }).then(data =>
+      data ? Promise.resolve(true) : Promise.resolve(false)
+    );
   }
 
   static getHashPassword(query) {

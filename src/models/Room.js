@@ -13,7 +13,7 @@ const roomSchema = new Schema({
   },
   conversation: [{
     type: Schema.Types.ObjectId,
-    ref: 'messages'
+    ref: 'messages',
   }],
   participans: [{
     type: Schema.Types.ObjectId,
@@ -23,9 +23,32 @@ const roomSchema = new Schema({
   versionKey: false,
   timestamps: true,
 });
+roomSchema.plugin(require('mongoose-autopopulate'));
 
 class Room extends model('rooms', roomSchema) {
+  static isRoomIdExist(roomId) {
+    return this.findById(roomId).then(data =>
+      data ? Promise.resolve(true) : Promise.resolve(false)
+    )
+  }
 
+  static isParticipans(roomId, participanId) {
+    return this.findOne({ _id: roomId, participans: { $in: [participanId] } })
+      .then(data =>
+        data ? Promise.resolve(true) : Promise.resolve(false)
+      ).catch(() => Promise.resolve(false));
+  }
+
+  static pushConversation(roomId, conversation) {
+    return new Promise((resolve, reject) => {
+      return this.findOneAndUpdate(
+        { _id: roomId },
+        { $push: { conversation } },
+        { $new: true },
+      ).then(result => resolve(result))
+        .catch(err => reject(err))
+    })
+  }
 }
 
 export default Room;

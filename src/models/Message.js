@@ -8,12 +8,18 @@ const messageSchema = new Schema({
   },
   sender: {
     type: Schema.Types.ObjectId,
-    ref: 'users'
+    ref: 'users',
+    autopopulate: true,
   },
+  room: {
+    type: Schema.Types.ObjectId,
+    ref: 'rooms'
+  }
 }, {
   versionKey: false,
   timestamps: true,
 });
+messageSchema.plugin(require('mongoose-autopopulate'));
 
 class Message extends model('messages', messageSchema) {
 
