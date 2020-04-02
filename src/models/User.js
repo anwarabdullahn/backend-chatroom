@@ -10,7 +10,11 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-  }
+  },
+  password: {
+    type: String,
+    required: true,
+  },
 }, {
   versionKey: false,
   timestamps: true,
@@ -23,6 +27,14 @@ class User extends model('users', userSchema) {
         data ? resolve(true) : resolve(false)
       );
     })
+  }
+
+  static getHashPassword(query) {
+    return new Promise((resolve, reject) => {
+      this.findOne(query)
+        .then(data => data ? resolve(data.password) : reject(null))
+        .catch(err => reject(err));
+    });
   }
 }
 
