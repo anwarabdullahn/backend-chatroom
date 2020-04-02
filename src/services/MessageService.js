@@ -4,7 +4,6 @@ import Room from "../models/Room";
 export const store = (data, sender, roomId) => {
   return new Promise(async (resolve, reject) => {
     const senderId = sender._id;
-    console.log(senderId, 'senderId')
     const isRoomExist = await Room.isRoomIdExist(roomId);
     const isAuthorizedRoom = await Room.isParticipans(roomId, senderId)
     const newMessage = new Message({
@@ -23,4 +22,11 @@ export const store = (data, sender, roomId) => {
       resolve(conversation);
     }
   });
+}
+
+export const get = (roomId, pageNumber) => {
+  return new Promise(async (resolve) => {
+    const result = await Message.findOnPage({ room: roomId }, pageNumber);
+    resolve(result);
+  })
 }

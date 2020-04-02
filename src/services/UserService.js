@@ -31,10 +31,7 @@ export const login = (data) => {
         const token = jwt.sign(payload, SECRET);
         resolve({ token: 'Bearer ' + token });
       })
-      .catch(err => {
-        console.log(err, 'err');
-        reject(err)
-      })
+      .catch(err => reject(err))
   });
 }
 
