@@ -25,6 +25,15 @@ messageSchema.plugin(mongoosePopulate);
 messageSchema.plugin(mongoosePaginate);
 
 class Message extends model('messages', messageSchema) {
+
+  /**
+   * 
+   * TODO: function to find message in pagination
+   * 
+   * @param {Object} query 
+   * @param {Number} pageNumber
+   * @returns {Promise}
+   */
   static findOnPage(query, pageNumber) {
     return new Promise((resolve, reject) => {
       this.find(query).then(result => {

@@ -13,7 +13,7 @@ router.post('/register', UserController.Register);
 router.post('/login', UserController.Login);
 router.get('/me', privateRouter, UserController.Me);
 router.post('/room', privateRouter, RoomController.Store);
-router.get('/room', privateRouter, RoomController.MyRoom);
+router.get('/room/:page', privateRouter, RoomController.MyRoom);
 router.post('/msg/:roomId', privateRouter, MessageController.StoreConversation);
 router.get('/msg/:roomId/:page', privateRouter, MessageController.GetConversation);
 

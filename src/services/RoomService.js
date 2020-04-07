@@ -12,10 +12,10 @@ export const create = (data, owner) => {
   })
 }
 
-export const myRoom = (owner) => {
+export const myRoom = (owner, pageNumber = 1) => {
   return new Promise((resolve, reject) => {
     const { _id } = owner;
-    return Room.find({ participans: { $in: [_id] } })
+    return Room.findOnPage({ participans: { $in: [_id] } }, pageNumber)
       .then(result => resolve(result)).catch(err => reject(err));
   })
 }

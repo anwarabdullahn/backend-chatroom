@@ -1,13 +1,11 @@
 import User from '../models/User';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 export const register = (data) => {
   return new Promise(async (resolve, reject) => {
-    const { email, name, password } = data;
+    const { email, name } = data;
     const isEmailExist = await User.isEmailExist(email);
-    const hash = bcrypt.hashSync(password, 10);
-    const newUser = new User({ email, name, password: hash });
+    const newUser = new User({ email, name });
     return isEmailExist
       ? reject({ email: 'Email already exist.' })
       : newUser.save().then(result => resolve(result)).catch(err => reject(err));
@@ -16,14 +14,11 @@ export const register = (data) => {
 
 export const login = (data) => {
   return new Promise(async (resolve, reject) => {
-    const { email, password } = data;
+    const { email } = data;
     const { SECRET } = process.env;
     const isEmailExist = await User.isEmailExist(email);
-    const hashPassword = await User.getHashPassword({ email });
-    const isPasswordMatch = bcrypt.compareSync(password, hashPassword);
 
     !isEmailExist && reject({ email: 'Email not exist.' });
-    !isPasswordMatch && reject({ password: 'Wrong Password' });
 
     return User.findOne({ email })
       .then(data => {
