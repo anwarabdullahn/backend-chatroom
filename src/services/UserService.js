@@ -21,10 +21,11 @@ export const login = (data) => {
     !isEmailExist && reject({ email: 'Email not exist.' });
 
     return User.findOne({ email })
-      .then(data => {
-        const payload = { email: data.email };
+      .lean()
+      .then(result => {
+        const payload = { email: result.email };
         const token = jwt.sign(payload, SECRET);
-        resolve({ token: 'Bearer ' + token });
+        resolve({ ...result, token: 'Bearer ' + token });
       })
       .catch(err => reject(err))
   });

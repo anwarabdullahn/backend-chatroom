@@ -36,22 +36,18 @@ class Message extends model('messages', messageSchema) {
    */
   static findOnPage(query, pageNumber) {
     return new Promise((resolve, reject) => {
-      this.find(query).then(result => {
-        const options = {
-          page: pageNumber,
-          limit: 10,
-          sort: { createdAt: -1 },
-          collation: {
-            locale: 'en'
-          }
-        };
-        const lastPage = Math.floor(result.length / 10) + 1;
-        if (pageNumber > lastPage || pageNumber < 0) options.page = 1;
-        this.paginate({}, options)
-          .then(data => {
-            resolve(data)
-          }).catch(err => reject(err))
-      }).catch(err => reject(err))
+      const options = {
+        page: pageNumber,
+        limit: 10,
+        sort: { createdAt: -1 },
+        collation: {
+          locale: 'en'
+        }
+      };
+      this.paginate(query, options)
+        .then(data => {
+          resolve(data)
+        }).catch(err => reject(err))
     })
   }
 }

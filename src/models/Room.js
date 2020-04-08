@@ -73,7 +73,26 @@ class Room extends model('rooms', roomSchema) {
       return this.findOneAndUpdate(
         { _id: roomId },
         { $push: { conversation } },
-        { $new: true },
+        { new: true },
+      ).then(result => resolve(result))
+        .catch(err => reject(err))
+    })
+  }
+
+  /**
+   * 
+   * TODO: function to add the participan to room
+   * 
+   * @param {Number} roomId
+   * @param {Object} participans
+   * @returns {Promise<Room>}
+   */
+  static pushParticipan(roomId, participans) {
+    return new Promise((resolve, reject) => {
+      return this.findOneAndUpdate(
+        { _id: roomId },
+        { $push: { participans } },
+        { new: true },
       ).then(result => resolve(result))
         .catch(err => reject(err))
     })
@@ -89,22 +108,18 @@ class Room extends model('rooms', roomSchema) {
    */
   static findOnPage(query, pageNumber) {
     return new Promise((resolve, reject) => {
-      this.find(query).then(result => {
-        const options = {
-          page: pageNumber,
-          limit: 10,
-          sort: { createdAt: -1 },
-          collation: {
-            locale: 'en'
-          },
-        }
-        const lastPage = Math.floor(result.length / 10) + 1;
-        if (pageNumber > lastPage || pageNumber < 0) options.page = 1;
-        this.paginate({}, options)
-          .then(data => {
-            resolve(data)
-          }).catch(err => reject(err))
-      }).catch(err => reject(err))
+      const options = {
+        page: pageNumber,
+        limit: 10,
+        sort: { createdAt: -1 },
+        collation: {
+          locale: 'en'
+        },
+      }
+      this.paginate(query, options)
+        .then(data => {
+          resolve(data)
+        }).catch(err => reject(err))
     })
   }
 }

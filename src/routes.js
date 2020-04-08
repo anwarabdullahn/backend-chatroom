@@ -16,5 +16,6 @@ router.post('/room', privateRouter, RoomController.Store);
 router.get('/room/:page', privateRouter, RoomController.MyRoom);
 router.post('/msg/:roomId', privateRouter, MessageController.StoreConversation);
 router.get('/msg/:roomId/:page', privateRouter, MessageController.GetConversation);
+router.post('/room/join', privateRouter, RoomController.JoinRoom);
 
 export default router;
